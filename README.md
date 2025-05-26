@@ -5,8 +5,6 @@
 - Guilherme Dalanora Dos Santos - 1991839
 - Gustavo Ramanoski - 1992124
 - Leonardo Lopes Martins Silva - 2010503
-- 
-
 
 ---
 
