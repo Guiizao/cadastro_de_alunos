@@ -1,0 +1,6 @@
+services:
+  escola:
+    build: .
+    container_name: sistema_escolar
+    stdin_open: true 
+    tty: true  
