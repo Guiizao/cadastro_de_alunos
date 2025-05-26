@@ -78,7 +78,7 @@ docker-compose up --build
 
 ## 📈 Fluxograma
 
-O fluxograma do sistema está disponível no arquivo `fluxograma_funcional.png` e também foi gerado visualmente usando o [Excalidraw](https://excalidraw.com).
+O fluxograma do sistema está disponível no arquivo `Fluxograma.png` e também foi gerado visualmente usando o [Excalidraw](https://excalidraw.com).
 
 ---
 
