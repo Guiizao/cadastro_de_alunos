@@ -81,10 +81,3 @@ docker-compose up --build
 O fluxograma do sistema está disponível no arquivo `Fluxograma.png` e também foi gerado visualmente usando o [Excalidraw](https://excalidraw.com).
 
 ---
-
-## ✅ Observações Finais
-
-O código foi comentado de forma simples, como se fosse um aluno organizando aos poucos o projeto.
-A ideia foi aprender a organizar e usar as estruturas de dados dentro de um sistema funcional.
-
-Feito com muito estudo 😄.
