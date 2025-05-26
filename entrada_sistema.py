@@ -67,10 +67,6 @@ while True:
         turmas.adicionar_aluno_em_turma()
     elif opcao == "10":
         pilha.exibir_historico()
-    elif opcao == "11":
-        arvore.listar_em_ordem()
-    elif opcao == "12":
-        turmas.mostrar_turma()
     elif opcao == "0":
         print("Saindo do sistema. Até logo!")
         break
