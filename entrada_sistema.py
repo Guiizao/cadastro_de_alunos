@@ -23,8 +23,6 @@ def exibir_menu():
     print("8. Criar turma")
     print("9. Matricular aluno em turma (fila)")
     print("10. Ver histórico de operações (pilha)")
-    print("11. Listar alunos por nome (ordem alfabética)")
-    print("12. Listar alunos de uma turma (lista encadeada)")
     print("0. Sair do sistema")
     print("========================================================")
 
