@@ -1,4 +1,3 @@
-# organizador_fila.py
 # Implementa uma fila para simular o processo de matrícula de alunos em ordem de chegada.
 # Utiliza lista comum em modo FIFO (First-In, First-Out).
 
