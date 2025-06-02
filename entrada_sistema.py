@@ -8,7 +8,6 @@ from conteudo.agrupador_turma import GerenciadorTurmas
 from materia_disciplina import GerenciadorDisciplinas
 from organizador_fila import FilaMatricula
 from organizador_pilha import PilhaHistorico
-from arvore_nome_aluno import ArvoreDeAlunos
 from registro_db.conexao_estudantil import ConexaoBanco
 
 def exibir_menu():
