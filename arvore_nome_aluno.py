@@ -1,4 +1,3 @@
-# arvore_nome_aluno.py
 # Implementação de uma árvore binária de busca (ABB) para armazenar alunos por nome em ordem alfabética.
 # Utilizada para facilitar consultas ordenadas sem necessidade de ordenação posterior.
 
