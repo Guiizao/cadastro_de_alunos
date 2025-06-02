@@ -1,4 +1,3 @@
-# lista_alunos_turma.py
 # Estrutura de dados que representa uma lista encadeada simples para armazenar os alunos de uma turma.
 # Cada nó representa um aluno e mantém referência para o próximo elemento da lista.
 
