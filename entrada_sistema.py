@@ -23,6 +23,7 @@ def exibir_menu():
     print("8. Criar turma")
     print("9. Matricular aluno em turma (fila)")
     print("10. Ver histórico de operações (pilha)")
+    print("11. Listar alunos de uma turma (lista encadeada)")
     print("0. Sair do sistema")
     print("========================================================")
 
@@ -67,6 +68,8 @@ while True:
         turmas.adicionar_aluno_em_turma()
     elif opcao == "10":
         pilha.exibir_historico()
+    elif opcao == "11":
+        turmas.mostrar_turma()
     elif opcao == "0":
         print("Saindo do sistema. Até logo!")
         break
