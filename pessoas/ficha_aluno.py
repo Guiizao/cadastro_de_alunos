@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-from arvore_nome_aluno import ArvoreDeAlunos 
 
 class GerenciadorAlunos:
     def __init__(self, banco, arvore):
