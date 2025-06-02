@@ -28,7 +28,6 @@ def exibir_menu():
 
 # Instâncias principais
 banco = ConexaoBanco()
-arvore = ArvoreDeAlunos()
 alunos = GerenciadorAlunos(banco, arvore)
 cursor = banco.cursor
 cursor.execute("SELECT * FROM alunos")
