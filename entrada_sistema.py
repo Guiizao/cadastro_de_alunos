@@ -21,9 +21,9 @@ def exibir_menu():
     print("6. Cadastrar professor")
     print("7. Criar disciplina")
     print("8. Criar turma")
-    print("9. Matricular aluno em turma (fila)")
-    print("10. Ver histórico de operações (pilha)")
-    print("11. Listar alunos de uma turma (lista encadeada)")
+    print("9. Matricular aluno em turma")
+    print("10. Ver histórico de operações")
+    print("11. Listar alunos de uma turma")
     print("0. Sair do sistema")
     print("========================================================")
 
