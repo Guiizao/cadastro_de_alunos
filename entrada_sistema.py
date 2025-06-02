@@ -34,7 +34,6 @@ cursor.execute("SELECT * FROM alunos")
 for aluno in cursor.fetchall():
     nome = aluno[1]  # nome
     dados = (aluno[1], aluno[2], aluno[3], aluno[4], aluno[5], aluno[6], aluno[7], aluno[8])
-    arvore.inserir(nome, dados)
 professores = GerenciadorProfessores(banco)
 disciplinas = GerenciadorDisciplinas(banco)
 turmas = GerenciadorTurmas()
