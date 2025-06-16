@@ -1,75 +1,82 @@
-
-# Este é o ponto inicial do sistema escolar via linha de comando.
-# Aqui a gente chama as funcionalidades e organiza a navegação no terminal.
-
 from pessoas.ficha_aluno import GerenciadorAlunos
 from pessoas.ficha_professor import GerenciadorProfessores
+from conteudo.materia_disciplina import GerenciadorDisciplinas
 from conteudo.agrupador_turma import GerenciadorTurmas
-from materia_disciplina import GerenciadorDisciplinas
-from organizador_fila import FilaMatricula
-from organizador_pilha import PilhaHistorico
 from registro_db.conexao_estudantil import ConexaoBanco
+from registro_db.historico import mostrar_historico
+from arvore_nome_aluno import ArvoreDeAlunos
 
-def exibir_menu():
-    print("\n================ MENU DO SISTEMA ESCOLAR ================")
-    print("1. Cadastrar novo aluno")
-    print("2. Editar aluno existente")
-    print("3. Remover aluno")
-    print("4. Listar todos os alunos")
-    print("5. Buscar aluno por ID")
-    print("6. Cadastrar professor")
-    print("7. Criar disciplina")
-    print("8. Criar turma")
-    print("9. Matricular aluno em turma")
-    print("10. Ver histórico de operações")
-    print("11. Listar alunos de uma turma")
-    print("0. Sair do sistema")
-    print("========================================================")
+def main():
+    db = ConexaoBanco()
+    arvore_alunos = ArvoreDeAlunos()
 
-# Instâncias principais
-banco = ConexaoBanco()
-cursor = banco.cursor
-cursor.execute("SELECT * FROM alunos")
-for aluno in cursor.fetchall():
-    nome = aluno[1]  # nome
-    dados = (aluno[1], aluno[2], aluno[3], aluno[4], aluno[5], aluno[6], aluno[7], aluno[8])
-professores = GerenciadorProfessores(banco)
-disciplinas = GerenciadorDisciplinas(banco)
-turmas = GerenciadorTurmas()
-fila = FilaMatricula()
-pilha = PilhaHistorico()
+    aluno_obj = GerenciadorAlunos(db, arvore_alunos)
+    professor_obj = GerenciadorProfessores(db)
+    disciplina_obj = GerenciadorDisciplinas(db)
+    turma_obj = GerenciadorTurmas(db)
 
-# Loop do menu principal
-while True:
-    exibir_menu()
-    opcao = input("Digite a opção desejada: ")
+    while True:
+        print("\n================ MENU DO SISTEMA ESCOLAR ================\n")
+        print("1. Cadastrar novo aluno")
+        print("2. Editar aluno existente")
+        print("3. Remover aluno")
+        print("4. Listar todos os alunos")
+        print("5. Buscar aluno por ID")
+        print("6. Cadastrar professor")
+        print("7. Criar disciplina")
+        print("8. Criar turma e adicionar alunos")
+        print("9. Matricular aluno em turma (fila)")
+        print("10. Ver histórico de operações (pilha)")
+        print("11. Listar alunos por nome (ordem alfabética)")
+        print("12. Listar alunos de uma turma (lista encadeada)")
+        print("0. Sair do sistema")
+        print("\n========================================================")
 
-    if opcao == "1":
-        alunos.cadastrar_novo()
-    elif opcao == "2":
-        alunos.editar_aluno()
-    elif opcao == "3":
-        alunos.remover_aluno()
-    elif opcao == "4":
-        alunos.listar_todos()
-    elif opcao == "5":
-        alunos.buscar_por_id()
-    elif opcao == "6":
-        professores.cadastrar_professor()
-    elif opcao == "7":
-        disciplinas.cadastrar_disciplina()
-    elif opcao == "8":
-        turmas.criar_nova_turma()
-    elif opcao == "9":
-        turmas.adicionar_aluno_em_turma()
-    elif opcao == "10":
-        pilha.exibir_historico()
-    elif opcao == "11":
-        turmas.mostrar_turma()
-    elif opcao == "0":
-        print("Saindo do sistema. Até logo!")
-        break
-    else:
-        print("Opção inválida. Tente de novo!")
+        opcao = input("Digite a opção desejada: ").strip()
 
-input("\nPressione Enter para sair...")
+        if opcao == "1":
+            aluno_obj.cadastrar_novo()
+
+        elif opcao == "2":
+            aluno_obj.editar_aluno()
+
+        elif opcao == "3":
+            aluno_obj.remover_aluno()
+
+        elif opcao == "4":
+            aluno_obj.listar_todos()
+
+        elif opcao == "5":
+            aluno_obj.buscar_por_id()
+
+        elif opcao == "6":
+            professor_obj.cadastrar()
+
+        elif opcao == "7":
+            disciplina_obj.cadastrar()
+
+        elif opcao == "8":
+            turma_obj.criar_nova_turma()
+
+        elif opcao == "9":
+            turma_obj.adicionar_aluno_em_turma()
+
+        elif opcao == "10":
+            mostrar_historico()
+
+        elif opcao == "11":
+            aluno_obj.listar_alunos_por_nome()
+
+        elif opcao == "12":
+            turma_obj.listar_alunos_por_turma()
+
+        elif opcao == "0":
+            print("Saindo do sistema...")
+            db.fechar()
+            break
+
+        else:
+            print("Opção inválida! Digite um número de 0 a 12.")
+
+if __name__ == "__main__":
+    main()

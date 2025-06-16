@@ -1,3 +1,4 @@
+# organizador_pilha.py
 # Implementa uma pilha para registrar as ações realizadas no sistema, funcionando como histórico.
 # Utiliza lista comum em modo LIFO (Last-In, First-Out).
 

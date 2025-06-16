@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from arvore_nome_aluno import ArvoreDeAlunos 
 
 class GerenciadorAlunos:
     def __init__(self, banco, arvore):
@@ -24,6 +25,13 @@ class GerenciadorAlunos:
 
     def cadastrar_novo(self):
         print("\n--- Cadastro de Novo Aluno ---")
+
+        self.db.cursor.execute("SELECT COUNT(*) FROM disciplinas")
+        qtd_disciplinas = self.db.cursor.fetchone()[0]
+
+        if qtd_disciplinas == 0:
+            print("\nNenhuma disciplina cadastrada ainda. Por favor, cadastre uma disciplina antes de adicionar alunos.\n")
+            return
 
         # Nome só com letras e espaços
         while True:
@@ -97,6 +105,15 @@ class GerenciadorAlunos:
         for aluno in alunos:
             print(f"[{aluno[0]}] {aluno[1]} - {aluno[2]} - {aluno[6]}")
 
+    def listar_alunos_por_nome(self):
+        print("\n--- Lista de Alunos em Ordem Alfabética ---")
+        self.db.cursor.execute("SELECT id, nome, email FROM alunos ORDER BY nome ASC")
+        alunos = self.db.cursor.fetchall()
+        if not alunos:
+            print("Nenhum aluno cadastrado.")
+            return
+        for aluno in alunos:
+            print(f"[{aluno[0]}] {aluno[1]} - {aluno[2]}")
     def buscar_por_id(self):
         print("\n--- Busca por ID ---")
         try:
@@ -112,9 +129,24 @@ class GerenciadorAlunos:
         else:
             print("Aluno não encontrado.")
 
+    def listar_alunos(self):
+        print("\n--- Alunos Cadastrados ---")
+        self.db.cursor.execute("SELECT id, nome, email FROM alunos")
+        alunos = self.db.cursor.fetchall()
+
+        if not alunos:
+            print("Nenhum aluno cadastrado.\n")
+            return
+
+        for aluno in alunos:
+            print(f"[{aluno[0]}] {aluno[1]} - {aluno[2]}")
+
+
     def editar_aluno(self):
         print("\n--- Edição de Aluno ---")
-        aluno_id = input("Digite o ID do aluno a ser editado: ")
+        self.listar_alunos()
+
+        aluno_id = input("\nDigite o ID do aluno a ser editado: ")
 
         if not aluno_id.isdigit():
             print("ID inválido.")
@@ -127,30 +159,68 @@ class GerenciadorAlunos:
             print("Aluno não encontrado.")
             return
 
-        print(f"Editando: {aluno[1]} ({aluno[2]})")
+        print(f"\nEditando: {aluno[1]} ({aluno[2]})")
 
-        # Aqui o usuário pode atualizar email e telefone, ou manter
+        novo_nome = input("Novo nome (deixe vazio para manter): ").strip()
         novo_email = input("Novo email (deixe vazio para manter): ").strip()
+        novo_tel = input("Novo telefone (deixe vazio para manter): ").strip()
+        novo_endereco = input("Novo endereço (deixe vazio para manter): ").strip()
+        novo_curso = input("Novo curso (deixe vazio para manter): ").strip()
+        nova_data_nasc = input("Nova data de nascimento (deixe vazio para manter): ").strip()
+
+        # Validações básicas (se quiser pode fazer validação de email, telefone, etc)
         if novo_email and not self.validar_email(novo_email):
             print("Email inválido. Alteração cancelada.")
             return
 
-        novo_tel = input("Novo telefone (deixe vazio para manter): ").strip()
         if novo_tel and not self.validar_telefone(novo_tel):
             print("Telefone inválido. Alteração cancelada.")
             return
 
-        # Se não atualizar, usa o antigo mesmo
+        # Se o campo estiver vazio, manter o valor atual
+        nome_final = novo_nome if novo_nome else aluno[1]
         email_final = novo_email if novo_email else aluno[2]
         tel_final = novo_tel if novo_tel else aluno[3]
+        endereco_final = novo_endereco if novo_endereco else aluno[4]
+        curso_final = novo_curso if novo_curso else aluno[5]
+        data_nasc_final = nova_data_nasc if nova_data_nasc else aluno[6]
 
-        self.db.cursor.execute(
-            "UPDATE alunos SET email = ?, telefone = ? WHERE id = ?",
-            (email_final, tel_final, aluno_id)
-        )
+        self.db.cursor.execute("""
+            UPDATE alunos
+            SET nome = ?, email = ?, telefone = ?, endereco = ?, curso = ?, data_nascimento = ?
+            WHERE id = ?
+        """, (nome_final, email_final, tel_final, endereco_final, curso_final, data_nasc_final, aluno_id))
+
         self.db.conexao.commit()
-        print("Aluno atualizado com sucesso!")
+        print("\nAluno atualizado com sucesso!")
 
+
+    def buscar_aluno_por_id(self):
+        print("\n--- Busca de Aluno por ID ---")
+        self.listar_alunos()
+
+        aluno_id = input("\nDigite o ID do aluno: ")
+
+        if not aluno_id.isdigit():
+            print("ID inválido.")
+            return
+
+        self.db.cursor.execute("SELECT * FROM alunos WHERE id = ?", (aluno_id,))
+        aluno = self.db.cursor.fetchone()
+
+        if not aluno:
+            print("\nAluno não encontrado.\n")
+            return
+
+        print("\n=== Dados completos do aluno ===")
+        print(f"ID: {aluno[0]}")
+        print(f"Nome: {aluno[1]}")
+        print(f"Email: {aluno[2]}")
+        print(f"Telefone: {aluno[3]}")
+        print(f"Endereço: {aluno[4]}")
+        print(f"Curso: {aluno[5]}")
+        print(f"Data de Nascimento: {aluno[6]}")
+        print("================================\n")
     def remover_aluno(self):
         print("\n--- Remoção de Aluno ---")
         aluno_id = input("Digite o ID do aluno a ser removido: ")
