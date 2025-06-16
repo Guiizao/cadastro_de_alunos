@@ -51,6 +51,8 @@ class GerenciadorDisciplinas:
             INSERT INTO disciplinas (nome, codigo, carga_horaria, descricao)
             VALUES (?, ?, ?, ?)''', (nome, codigo, carga, descricao))
         self.db.conexao.commit()
+        from registro_db.historico import adicionar_operacao
+        adicionar_operacao(f"Disciplina '{nome}' cadastrada com código '{codigo}'.")
         self.codigos_existentes.add(codigo)
 
         print("Disciplina cadastrada com sucesso!")

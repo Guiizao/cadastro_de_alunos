@@ -94,6 +94,9 @@ class GerenciadorAlunos:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)""", dados)
         self.db.conexao.commit()
 
+        from registro_db.historico import adicionar_operacao
+        adicionar_operacao(f"Aluno '{nome}' cadastrado.")
+
         # E também insiro esse aluno na árvore pra poder listar por nome depois
         self.arvore.inserir(nome, dados)
         print("Aluno cadastrado com sucesso e inserido na árvore!")
@@ -186,12 +189,14 @@ class GerenciadorAlunos:
         data_nasc_final = nova_data_nasc if nova_data_nasc else aluno[6]
 
         self.db.cursor.execute("""
-            UPDATE alunos
-            SET nome = ?, email = ?, telefone = ?, endereco = ?, curso = ?, data_nascimento = ?
-            WHERE id = ?
-        """, (nome_final, email_final, tel_final, endereco_final, curso_final, data_nasc_final, aluno_id))
+        UPDATE alunos
+        SET nome = ?, email = ?, telefone = ?, endereco = ?, curso = ?, nascimento = ?
+        WHERE id = ?
+    """, (nome_final, email_final, tel_final, endereco_final, curso_final, data_nasc_final, aluno_id))
 
         self.db.conexao.commit()
+        from registro_db.historico import adicionar_operacao
+        adicionar_operacao(f"Aluno ID {aluno_id} editado.")
         print("\nAluno atualizado com sucesso!")
 
 
@@ -240,6 +245,9 @@ class GerenciadorAlunos:
         if confirmacao.lower() == 's':
             self.db.cursor.execute("DELETE FROM alunos WHERE id = ?", (aluno_id,))
             self.db.conexao.commit()
+            from registro_db.historico import adicionar_operacao
+            adicionar_operacao(f"Aluno '{aluno[0]}' removido.")
+
             print("Aluno removido com sucesso.")
         else:
             print("Remoção cancelada.")

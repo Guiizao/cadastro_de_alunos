@@ -57,7 +57,8 @@ class GerenciadorTurmas:
             VALUES (?, ?, ?)
         """, (codigo_turma, id_disciplina, id_professor))
         self.db.conexao.commit()
-
+        from registro_db.historico import adicionar_operacao
+        adicionar_operacao(f"Turma '{codigo_turma}' criada com disciplina ID {id_disciplina} e professor ID {id_professor}.")
         print(f"Turma {codigo_turma} criada com sucesso!")
 
     def adicionar_aluno_em_turma(self):
@@ -89,7 +90,8 @@ class GerenciadorTurmas:
             VALUES (?, ?)
         """, (id_turma, id_aluno))
         self.db.conexao.commit()
-
+        from registro_db.historico import adicionar_operacao
+        adicionar_operacao(f"Aluno ID {id_aluno} matriculado na turma ID {id_turma}.")
         print("Aluno matriculado na turma com sucesso!")
 
     def listar_todas_as_turmas(self):

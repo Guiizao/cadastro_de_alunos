@@ -7,7 +7,7 @@ class GerenciadorProfessores:
     def validar_email(self, email):
         return re.match(r"[^@]+@[^@]+\.[a-z]{2,4}$", email)
 
-    def cadastrar_professor(self):
+    def cadastrar(self):
         print("\n--- Cadastro de Novo Professor ---")
 
         # Nome só pode ter letras e espaços
@@ -44,6 +44,9 @@ class GerenciadorProfessores:
                 INSERT INTO professores (nome, email, telefone, registro_funcional)
                 VALUES (?, ?, ?, ?)''', (nome, email, telefone, registro))
             self.db.conexao.commit()
+            from registro_db.historico import adicionar_operacao
+            adicionar_operacao(f"Professor '{nome}' cadastrado.")
+
             print("Professor cadastrado com sucesso!")
         except Exception as e:
             print(f"Erro ao cadastrar professor: {e}")
@@ -92,8 +95,11 @@ class GerenciadorProfessores:
 
         self.db.cursor.execute("UPDATE professores SET email = ?, telefone = ? WHERE registro_funcional = ?", (email_final, tel_final, registro))
         self.db.conexao.commit()
+        from registro_db.historico import adicionar_operacao
+        adicionar_operacao(f"Professor '{prof[0]}' (registro {registro}) editado.")
         print("Professor atualizado com sucesso!")
-
+        self.db.cursor.execute("SELECT nome FROM professores WHERE registro_funcional = ?", (registro,))
+        prof = self.db.cursor.fetchone()
     def remover_professor(self):
         print("\n--- Remoção de Professor ---")
         registro = input("Digite o número de registro do professor a ser removido: ")
@@ -109,6 +115,8 @@ class GerenciadorProfessores:
         if confirmacao.lower() == 's':
             self.db.cursor.execute("DELETE FROM professores WHERE registro_funcional = ?", (registro,))
             self.db.conexao.commit()
+            from registro_db.historico import adicionar_operacao
+            adicionar_operacao(f"Professor '{prof[0]}' removido.")
             print("Professor removido com sucesso.")
         else:
             print("Remoção cancelada.")
